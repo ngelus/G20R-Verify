@@ -2,27 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const winston = require('winston');
-
-const loggingFormat = winston.format.printf(
-  ({ level, message, label, timestamp }) => {
-    return `${timestamp} [${level}]: ${message}`;
-  }
-);
-
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.timestamp(),
-    loggingFormat
-  ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
-  ],
-});
+const { logger } = require('./logger.js');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -32,7 +12,14 @@ const TOKEN = process.env.TOKEN;
 
 var config = require('./config.json');
 
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const {
+  Client,
+  Events,
+  GatewayIntentBits,
+  Collection,
+  REST,
+  Routes,
+} = require('discord.js');
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -65,9 +52,25 @@ client.once(Events.ClientReady, (c) => {
   logger.info(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on(Events.InteractionCreate, (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  logger.log(interaction);
+
+  const command = interaction.client.commands.get(interaction.commandName);
+
+  if (!command) {
+    logger.warn(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    logger.error(error);
+    await interaction.reply({
+      content: 'There was an error while executing this command',
+      ephemeral: true,
+    });
+  }
 });
 
 /* ### LOGIN ### */

@@ -6,5 +6,5 @@ TOKEN=
 # config.json:
 
 {
-
+"ownerID":""
 }
