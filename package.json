@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ngelus/G20R-Verify#readme",
   "dependencies": {
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "winston": "^3.8.2"
   }
 }
