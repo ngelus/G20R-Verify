@@ -1,0 +1,23 @@
+{
+  "name": "g20r-verify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngelus/G20R-Verify.git"
+  },
+  "author": "ngelus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ngelus/G20R-Verify/issues"
+  },
+  "homepage": "https://github.com/ngelus/G20R-Verify#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
+  }
+}
